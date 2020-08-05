@@ -15,8 +15,8 @@ c_p = 6.15              # J cm-3 K-1
 [Mesh]
     type = GeneratedMesh
     dim = 2
-    nx = 400
-    ny = 400
+    nx = 200
+    ny = 200
     xmin = 0
     xmax = 200
     ymin = 0
@@ -61,8 +61,12 @@ c_p = 6.15              # J cm-3 K-1
 [Executioner]
   type = InversePowerMethod
   max_power_iterations = 50
-  xdiff = 'group1diff'
 
+  # fission power normalization
+  normalization = 'powernorm'
+  normal_factor = 1e9           # Watts
+
+  xdiff = 'group1diff'
   bx_norm = 'bnorm'
   k0 = 1.00400
   pfactor = 1e-2
@@ -89,6 +93,10 @@ c_p = 6.15              # J cm-3 K-1
   [../]
   [./tot_fissions]
     type = ElmIntegTotFissPostprocessor
+    execute_on = linear
+  [../]
+  [./powernorm]
+    type = ElmIntegTotFissHeatPostprocessor
     execute_on = linear
   [../]
   [./group1norm]
@@ -125,12 +133,25 @@ c_p = 6.15              # J cm-3 K-1
   [../]
 []
 
+[VectorPostprocessors]
+  [./aa_line]
+    type = LineValueSampler
+    variable = 'group1 group2 group3 group4 group5 group6'
+    start_point = '0 1 0'
+    end_point = '2 1 0'
+    num_points = 9
+    sort_by = x
+    execute_on = FINAL
+  [../]
+[]
+
 [Outputs]
   perf_graph = true
   print_linear_residuals = true
   [./out]
     type = Exodus
   [../]
+  csv = true
 []
 
 [Debug]
