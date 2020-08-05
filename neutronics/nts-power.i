@@ -134,12 +134,21 @@ c_p = 6.15              # J cm-3 K-1
 []
 
 [VectorPostprocessors]
-  [./aa_line]
+  [./discrete]
     type = LineValueSampler
     variable = 'group1 group2 group3 group4 group5 group6'
     start_point = '0 1 0'
     end_point = '2 1 0'
     num_points = 9
+    sort_by = x
+    execute_on = FINAL
+  [../]
+  [./continuous]
+    type = LineValueSampler
+    variable = 'group1 group2 group3 group4 group5 group6'
+    start_point = '0 1 0'
+    end_point = '2 1 0'
+    num_points = 201
     sort_by = x
     execute_on = FINAL
   [../]
