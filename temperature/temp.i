@@ -1,5 +1,7 @@
 density = .002  # kg cm-3
 cp = 6.15       # J cm-3 K-1
+k = .005        # W cm-1 K-1
+gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
 
 [GlobalParams]
   num_groups = 6
@@ -73,11 +75,13 @@ cp = 6.15       # J cm-3 K-1
     type = SolutionUserObject
     mesh = '../neutronics/nts-power_out.e'
     system_variables = 'group1 group2 group3 group4 group5 group6'
+    timestep = LATEST
   [../]
   [./velocities]
     type = SolutionUserObject
-    mesh = '../vel-field_exodus.e'
+    mesh = '../vel-field/vel-field-stabilized_exodus.e'
     system_variables = 'ux uy'
+    timestep = LATEST
   [../]
 []
 
@@ -92,6 +96,11 @@ cp = 6.15       # J cm-3 K-1
     variable = temp
     u = ux
     u = uy
+  [../]
+  [./temp_sink]
+    type = HeatSource
+    variable = temp
+    function = heat_transfer
   [../]
 []
 
@@ -146,11 +155,22 @@ cp = 6.15       # J cm-3 K-1
   [../]
 []
 
+[Functions]
+  [./heat_transfer]
+    type = ParsedFunction
+    value = '${gamma} * (900 - tem)'
+    vars = 'tem'
+    vals 'temp'
+  [../]
+[]
+
 [Materials]
   [./fuel]
     type = GenericMoltresMaterial
     property_table_root = '../neutron-data/benchmark_'
     interp_type = 'linear'
+    prop_names = 'k rho cp'
+    prop_values = '${k} ${density} ${cp}'
   [../]
 []
 
