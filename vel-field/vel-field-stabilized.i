@@ -7,28 +7,28 @@ Sc = 2.0e8              # Schmidt number
 [GlobalParams]
   pspg = true
   supg = true
-  alpha = .3333
+  alpha = .333
   integrate_p_by_parts = true
   gravity = '0 0 0'  
 []
 
 [Mesh]
-  [./generated_mesh]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 200
-    ny = 200
-    xmin = 0
-    xmax = 200
-    ymin = 0
-    ymax = 200
-    elem_type = QUAD9
-  [../]
+  type = GeneratedMesh
+  dim = 2
+  nx = 200
+  ny = 200
+  xmin = 0
+  xmax = 200
+  ymin = 0
+  ymax = 200
+  elem_type = QUAD9
+[]
+
+[MeshModifiers]
   [./corner_node]
-    type = ExtraNodesetGenerator
+    type = AddExtraNodeset
     new_boundary = 'pinned_node'
     coord = '200.0 200.0'
-    input = generated_mesh
   [../]
 []
 
@@ -157,6 +157,29 @@ Sc = 2.0e8              # Schmidt number
   [../]
 []
 
+[VectorPostprocessors]
+  [./aa]
+    type = LineValueSampler
+    variable = 'ux uy'
+    start_point = '0 100 0'
+    end_point = '200 100 0'
+    num_points = 201
+    sort_by = x
+    execute_on = TIMESTEP_END
+    outputs = 'csv'
+  [../]
+  [./bb]
+    type = LineValueSampler
+    variable = 'ux uy'
+    start_point = '100 0 0'
+    end_point = '100 200 0'
+    num_points = 201
+    sort_by = y
+    execute_on = TIMESTEP_END
+    outputs = 'csv'
+  [../]
+[]
+
 [Preconditioning]
   [./SMP]
     type = SMP
@@ -169,6 +192,10 @@ Sc = 2.0e8              # Schmidt number
   [./exodus]
     type = Exodus
     execute_on = 'timestep_end'
+  [../]
+  [./csv]
+    type = CSV
+    execute_on = 'final'
   [../]
 []
 

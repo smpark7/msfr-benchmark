@@ -10,22 +10,22 @@ Sc = 2.0e8              # Schmidt number
 []
 
 [Mesh]
-  [./generated_mesh]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 200
-    ny = 200
-    xmin = 0
-    xmax = 200
-    ymin = 0
-    ymax = 200
-    elem_type = QUAD9
-  [../]
+  type = GeneratedMesh
+  dim = 2
+  nx = 200
+  ny = 200
+  xmin = 0
+  xmax = 200
+  ymin = 0
+  ymax = 200
+  elem_type = QUAD9
+[]
+
+[MeshModifiers]
   [./corner_node]
-    type = ExtraNodesetGenerator
+    type = AddExtraNodeset
     new_boundary = 'pinned_node'
     coord = '200.0 200.0'
-    input = generated_mesh
   [../]
 []
 
@@ -132,8 +132,8 @@ Sc = 2.0e8              # Schmidt number
 
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
-  petsc_options_iname = '-pc_type -pc_factor_shift_type'
-  petsc_options_value = 'lu       NONZERO'
+  petsc_options_iname = '-pc_type -pc_factor_shift_type' # -pc_factor_mat_solver_package'
+  petsc_options_value = 'lu       NONZERO              ' # superlu_dist'
   line_search = 'none'
 
   nl_max_its = 15
