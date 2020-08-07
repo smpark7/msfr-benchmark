@@ -104,9 +104,10 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     v = uy
   [../]
   [./temp_sink]
-    type = HeatSource
+    type = ManuHX
     variable = temp
-    function = heat_transfer
+    htc = ${gamma}
+    tref = 900
   [../]
 []
 
@@ -166,15 +167,6 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     from_variable = uy
     solution = velocities
     execute_on = INITIAL
-  [../]
-[]
-
-[Functions]
-  [./heat_transfer]
-    type = ParsedFunction
-    value = '${gamma} * (900 - tem)'
-    vars = 'tem'
-    vals = 'temp'
   [../]
 []
 
