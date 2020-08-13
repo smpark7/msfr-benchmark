@@ -10,6 +10,7 @@ gamma = 100       # W cm-2 K-1, Volumetric heat transfer coefficient
   pre_concs = 'pre1 pre2 pre3 pre4 pre5 pre6 pre7 pre8'
 #  temperature = 900
   sss2_input = true
+  use_exp_form = false
 [../]
 
 [Mesh]
@@ -163,6 +164,7 @@ gamma = 100       # W cm-2 K-1, Volumetric heat transfer coefficient
     variable = ux
     from_variable = ux
     solution = velocities
+    scale_factor = 100
 #    execute_on = INITIAL
   [../]
   [./uy]
@@ -170,6 +172,7 @@ gamma = 100       # W cm-2 K-1, Volumetric heat transfer coefficient
     variable = uy
     from_variable = uy
     solution = velocities
+    scale_factor = 100
 #    execute_on = INITIAL
   [../]
 []
@@ -251,7 +254,10 @@ gamma = 100       # W cm-2 K-1, Volumetric heat transfer coefficient
 [Outputs]
   perf_graph = true
   print_linear_residuals = true
-  exodus = true
+  [./exodus]
+    type = Exodus
+    execute_on = final
+  [../]
   [./csv]
     type = CSV
     execute_on = 'final'
