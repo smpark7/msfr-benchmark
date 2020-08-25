@@ -56,7 +56,7 @@ c_p = 6.15              # J cm-3 K-1
 
   # fission power normalization
   normalization = 'powernorm'
-  normal_factor = 1e9           # Watts
+  normal_factor = 1e7           # Watts, 1e9 / 100
 
   xdiff = 'group1diff'
   bx_norm = 'bnorm'
