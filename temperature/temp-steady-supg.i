@@ -2,6 +2,7 @@ density = .002  # kg cm-3
 cp = 3075       # J kg-1 K-1, 6.15 / 2.0e-3
 k = .005        # W cm-1 K-1
 gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
+tau = .3333     # SUPG stabilization factor 
 
 [GlobalParams]
   num_groups = 6
@@ -33,7 +34,6 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     family = LAGRANGE
     order = FIRST
     initial_condition = 900
-    scaling = 1e-2
   [../]
 []
 
@@ -70,6 +70,10 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     family = LAGRANGE
     order = FIRST
   [../]
+  [./vel]
+    family = LAGRANGE_VEC
+    order = FIRST
+  [../]
 []
 
 [UserObjects]
@@ -90,20 +94,27 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
 []
 
 [Kernels]
-  [./temp_time_derivative]
-    type = INSTemperatureTimeDerivative
-    variable = temp
-  [../]
   [./temp_source]
-    type = TransientFissionHeatSource
+    type = FissionHeatSource
     nt_scale = 1
     variable = temp
+    power = 3.23632e-11
+    tot_fissions = 1
   [../]
-  [./temp_all]
-    type = INSTemperature
+  [./temp_cond]
+    type = ADDiffusion
     variable = temp
-    u = ux
-    v = uy
+    velocity = vel
+  [../]
+  [./temp_advec]
+    type = INSADTemperatureAdvection
+    variable = temp
+    velocity = vel
+  [../]
+  [./temp_supg]
+    type = INSADTemperatureAdvectionSUPG
+    variable = temp
+    velocity = vel
   [../]
   [./temp_sink]
     type = ManuHX
@@ -150,17 +161,27 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     from_variable = group6
     solution = fluxes
   [../]
-  [./ux]
-    type = SolutionAux
-    variable = ux
+[]
+
+[Functions]
+  [./uxf]
+    type = SolutionFunction
     from_variable = ux
     solution = velocities
   [../]
-  [./uy]
-    type = SolutionAux
-    variable = uy
+  [./uyf]
+    type = SolutionFunction
     from_variable = uy
     solution = velocities
+  [../]
+[]
+
+[ICs]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = vel
+    function_x = uxf
+    function_y = uyf
   [../]
 []
 
@@ -169,15 +190,14 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     type = GenericMoltresMaterial
     property_tables_root = '../neutron-data/benchmark_'
     interp_type = 'linear'
-    prop_names = 'k rho cp'
-    prop_values = '${k} ${density} ${cp}'
+    prop_names = 'k rho cp tau'
+    prop_values = '${k} ${density} ${cp} ${tau}'
     temperature = 900
   [../]
 []
 
 [Executioner]
-  type = Transient
-  end_time = 2000
+  type = Steady
 
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
@@ -189,19 +209,6 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
   l_max_its = 30
 
   nl_abs_tol = 1e-6
-
-  dtmin = 1e-4
-  dtmax = 1
-  steady_state_detection = true
-  steady_state_start_time = 20
-  [./TimeStepper]
-    type = IterationAdaptiveDT
-    dt = 1e-4
-    cutback_factor = .5
-    growth_factor = 1.2
-    optimal_iterations = 16
-    iteration_window = 4
-  [../]
 []
 
 [Preconditioning]
@@ -240,10 +247,7 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
 [Outputs]
   perf_graph = true
   print_linear_residuals = true
-  [./exodus]
-    type = Exodus
-    execute_on = final
-  [../]
+  exodus = true
   [./csv]
     type = CSV
     execute_on = 'final'

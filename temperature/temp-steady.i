@@ -33,7 +33,6 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     family = LAGRANGE
     order = FIRST
     initial_condition = 900
-    scaling = 1e-2
   [../]
 []
 
@@ -90,14 +89,12 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
 []
 
 [Kernels]
-  [./temp_time_derivative]
-    type = INSTemperatureTimeDerivative
-    variable = temp
-  [../]
   [./temp_source]
-    type = TransientFissionHeatSource
+    type = FissionHeatSource
     nt_scale = 1
     variable = temp
+    power = 3.23632e-11
+    tot_fissions = 1
   [../]
   [./temp_all]
     type = INSTemperature
@@ -176,8 +173,7 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
 []
 
 [Executioner]
-  type = Transient
-  end_time = 2000
+  type = Steady
 
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
@@ -189,19 +185,6 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
   l_max_its = 30
 
   nl_abs_tol = 1e-6
-
-  dtmin = 1e-4
-  dtmax = 1
-  steady_state_detection = true
-  steady_state_start_time = 20
-  [./TimeStepper]
-    type = IterationAdaptiveDT
-    dt = 1e-4
-    cutback_factor = .5
-    growth_factor = 1.2
-    optimal_iterations = 16
-    iteration_window = 4
-  [../]
 []
 
 [Preconditioning]
@@ -240,10 +223,7 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
 [Outputs]
   perf_graph = true
   print_linear_residuals = true
-  [./exodus]
-    type = Exodus
-    execute_on = final
-  [../]
+  exodus = true
   [./csv]
     type = CSV
     execute_on = 'final'

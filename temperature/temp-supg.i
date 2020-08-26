@@ -70,6 +70,10 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     family = LAGRANGE
     order = FIRST
   [../]
+  [./vel]
+    family = LAGRANGE_VEC
+    order = FIRST
+  [../]
 []
 
 [UserObjects]
@@ -104,6 +108,11 @@ gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
     variable = temp
     u = ux
     v = uy
+  [../]
+  [./temp_supg]
+    type = INSADTemperatureAdvectionSUPG
+    variable = temp
+    velocity = vel
   [../]
   [./temp_sink]
     type = ManuHX
