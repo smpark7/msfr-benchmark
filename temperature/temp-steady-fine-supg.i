@@ -2,7 +2,7 @@ density = .002  # kg cm-3
 cp = 3075       # J kg-1 K-1, 6.15 / 2.0e-3
 k = .005        # W cm-1 K-1
 gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
-tau = .3333     # SUPG stabilization factor 
+tau = .2     # SUPG stabilization factor 
 
 [GlobalParams]
   num_groups = 6
