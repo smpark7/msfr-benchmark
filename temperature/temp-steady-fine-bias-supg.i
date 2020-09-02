@@ -2,7 +2,7 @@ density = .002  # kg cm-3
 cp = 3075       # J kg-1 K-1, 6.15 / 2.0e-3
 k = .005        # W cm-1 K-1
 gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
-tau = .2     # SUPG stabilization factor 
+tau = .3333     # SUPG stabilization factor 
 
 [GlobalParams]
   num_groups = 6
@@ -14,15 +14,7 @@ tau = .2     # SUPG stabilization factor
 [../]
 
 [Mesh]
-    type = GeneratedMesh
-    dim = 2
-    nx = 200
-    ny = 200
-    xmin = 0
-    xmax = 200
-    ymin = 0
-    ymax = 200
-    elem_type = QUAD9
+  file = '../neutronics/bias-400.e'
 []
 
 [Problem]
@@ -79,14 +71,14 @@ tau = .2     # SUPG stabilization factor
 [UserObjects]
   [./fluxes]
     type = SolutionUserObject
-    mesh = '../neutronics/nts-power_out.e'
+    mesh = '../neutronics/nts-power-fine-bias_out.e'
     system_variables = 'group1 group2 group3 group4 group5 group6'
     timestep = LATEST
     execute_on = INITIAL
   [../]
   [./velocities]
     type = SolutionUserObject
-    mesh = '../vel-field/vel-field-stabilized_exodus.e'
+    mesh = '../vel-field/vel-field-stabilized-fine-bias_exodus.e'
     system_variables = 'ux uy'
     timestep = LATEST
     execute_on = INITIAL
