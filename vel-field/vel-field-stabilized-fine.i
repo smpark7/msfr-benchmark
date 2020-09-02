@@ -7,7 +7,7 @@ Sc = 2.0e8              # Schmidt number
 [GlobalParams]
   pspg = true
   supg = true
-  alpha = .15
+  alpha = .3333
   integrate_p_by_parts = true
   gravity = '0 0 0'  
 []
@@ -15,13 +15,12 @@ Sc = 2.0e8              # Schmidt number
 [Mesh]
   type = GeneratedMesh
   dim = 2
-  nx = 200
-  ny = 200
+  nx = 400
+  ny = 400
   xmin = 0
   xmax = 200
   ymin = 0
   ymax = 200
-  elem_type = QUAD9
 []
 
 [MeshModifiers]

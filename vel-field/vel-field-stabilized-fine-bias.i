@@ -7,21 +7,13 @@ Sc = 2.0e8              # Schmidt number
 [GlobalParams]
   pspg = true
   supg = true
-  alpha = .15
+  alpha = .3333
   integrate_p_by_parts = true
   gravity = '0 0 0'  
 []
 
 [Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 200
-  ny = 200
-  xmin = 0
-  xmax = 200
-  ymin = 0
-  ymax = 200
-  elem_type = QUAD9
+  file = '../neutronics/bias-400.e'
 []
 
 [MeshModifiers]
