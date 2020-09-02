@@ -6,7 +6,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{tcolorbox}
-\usepackage[margin=.5in]{geometry}
+\usepackage[margin=.6in]{geometry}
 \usepackage{caption}
 \usepackage{float}
 \usepackage{multirow}
@@ -21,7 +21,7 @@
 
 \begin{document}
 %
-\title{Result Data Tables}
+\title{Multiphysics Benchmark Results}
 \author{}
 \date{}
 %
@@ -29,44 +29,146 @@
 %
 \section*{Step 0.1: Velocity Field}
 
-\begin{table}[htb!]
-	\caption{Velocity components along $AA'$ and $BB'$ centerline.}
+\begin{table}[htbp!]
+	\caption{Velocity components along centerlines $AA'$ and $BB'$.}
 	\centering
 	\footnotesize
 	\setlength\tabcolsep{1.5pt}
-	\begin{tabular}{l c c c c c c c c c}
+	\begin{tabular}{c c c c c c c c c c c}
 		\toprule
-		\multirow{2}{*}{\textbf{Observable}} & \multicolumn{9}{c}{\textbf{Results along $AA'$} (points coordinate are expressed in m)} \\
-		& {(0,1)} & {(0.25,1)} & {(0.5,1)} & {(0.75,1)} & {(1,1)} & {(1.25,1)} & {(1.5,1)} & {(1.75,1)} & {(2,1)} \\
+		\multirow{2}{*}{\textbf{Observable}} & \multirow{2}{*}{\textbf{Code}} & \multicolumn{9}{c}{\textbf{Results along $AA'$} (point coordinates are expressed in m)} \\
+		& & {(0,1)} & {(0.25,1)} & {(0.5,1)} & {(0.75,1)} & {(1,1)} & {(1.25,1)} & {(1.5,1)} & {(1.75,1)} & {(2,1)} \\
 		\midrule
-		$u_x$ (m s$^{-1}$) & 0.000E+00 & -1.923E-02 & -5.373E-02 & -8.372E-02 & -1.025E-01 & -1.044E-01 & -7.975E-02 & -3.079E-02 & 0.000E+00 \\
-		$u_y$ (m s$^{-1}$) & 0.000E+00 & 7.270E-02 & 8.581E-02 & 6.088E-02 & 1.250E-02 & -4.795E-02 & -9.613E-02 & -8.723E-02 & 0.000E+00\\
+		\multirow{5}{*}{$u_x$ (m s$^{-1}$)} & Moltres & 0.000E+00 & -1.923E-02 & -5.373E-02 & -8.373E-02 & -1.025E-01 & -1.044E-01 & -7.975E-02 & -3.079E-02 & 0.000E+00 \\
+		& CNRS & 0.000E+00 & -1.924E-02 & -5.372E-02 & -8.369E-02 & -1.025E-01 & -1.043E-01 & -7.972E-02 & -3.080E-02 & 0.000E+00 \\
+        & PoliMi & 0.000E+00 & -1.922E-02 & -5.365E-02 & -8.357E-02 & -1.023E-01 & -1.041E-01 & -7.947E-02 & -3.066E-02 & 0.000E+00 \\
+        & PSI & 0.000E+00 & -1.929E-02 & -5.366E-02 & -8.332E-02 & -1.018E-01 & -1.034E-01 & -7.912E-02 & -3.072E-02 & 0.000E+00 \\
+        & TUD & 1.002E-06 & -1.922E-02 & -5.372E-02 & -8.371E-02 & -1.025E-01 & -1.044E-01 & -7.977E-02 & -3.081E-02 & 4.198E-06 \\
+        \midrule
+		\multirow{5}{*}{$u_y$ (m s$^{-1}$)} & Moltres & 0.000E+00 & 7.270E-02 & 8.581E-02 & 6.088E-02 & 1.250E-02 & -4.796E-02 & -9.613E-02 & -8.723E-02 & 0.000E+00\\
+		& CNRS & 0.000E+00 & 7.266E-02 & 8.575E-02 & 6.084E-02 & 1.251E-02 & -4.789E-02 & -9.606E-02 & -8.722E-02 & 0.000E+00 \\
+        & PoliMi & 0.000E+00 & 7.139E-02 & 8.433E-02 & 6.007E-02 & 1.269E-02 & -4.691E-02 & -9.472E-02 & -8.621E-02 & 0.000E+00 \\
+        & PSI & 0.000E+00 & 7.265E-02 & 8.534E-02 & 6.021E-02 & 1.230E-02 & -4.734E-02 & -9.536E-02 & -8.720E-02 & 0.000E+00 \\
+        & TUD & 5.877E-06 & 7.269E-02 & 8.580E-02 & 6.089E-02 & 1.252E-02 & -4.794E-02 & -9.613E-02 & -8.726E-02 & -1.013E-05 \\
 		\midrule
 		\midrule
-		\multirow{2}{*}{\textbf{Observable}} & \multicolumn{9}{c}{\textbf{Results along $BB'$} (points coordinate are expressed in m)} \\
-		& {(1,0)} & {(1,0.25)} & {(1,0.5)} & {(1,0.75)} & {(1,1)} & {(1,1.25)} & {(1,1.5)} & {(1,1.75)} & {(1,2)} \\
+		\multirow{2}{*}{\textbf{Observable}} & \multirow{2}{*}{\textbf{Code}} & \multicolumn{9}{c}{\textbf{Results along $BB'$} (point coordinates are expressed in m)} \\
+		& & {(1,0)} & {(1,0.25)} & {(1,0.5)} & {(1,0.75)} & {(1,1)} & {(1,1.25)} & {(1,1.5)} & {(1,1.75)} & {(1,2)} \\
 		\midrule
-		$u_x$ (m s$^{-1}$) & 0.000E+00 & -3.518E-02 & -6.244E-02 & -8.724E-02 & -1.025E-01 & -8.772E-02 & -1.148E-02 & 1.718E-01 & 5.000E-01 \\
-		$u_y$ (m s$^{-1}$) & 0.000E+00 & 5.171E-05 & 6.168E-04 & 3.842E-03 & 1.250E-02 & 2.525E-02 & 3.050E-02 & 1.500E-02 & 0.000E+00\\
+		\multirow{5}{*}{$u_x$ (m s$^{-1}$)} & Moltres & 0.000E+00 & -3.518E-02 & -6.244E-02 & -8.724E-02 & -1.025E-01 & -8.772E-02 & -1.148E-02 & 1.718E-01 & 5.000E-01 \\
+		& CNRS & 0.000E+00 & -3.517E-02 & -6.242E-02 & -8.720E-02 & -1.025E-01 & -8.766E-02 & -1.147E-02 & 1.717E-01 & 5.000E-01 \\
+        & PoliMi & 0.000E+00 & -3.423E-02 & -6.107E-02 & -8.613E-02 & -1.023E-01 & -8.861E-02 & -1.299E-02 & 1.706E-01 & 5.000E-01 \\
+        & PSI & 0.000E+00 & -3.511E-02 & -6.217E-02 & -8.667E-02 & -1.018E-01 & -8.731E-02 & -1.191E-02 & 1.705E-01 & 5.000E-01 \\
+        & TUD & 1.494E-06 & -3.519E-02 & -6.244E-02 & -8.724E-02 & -1.025E-01 & -8.770E-02 & -1.146E-02 & 1.718E-01 & 5.000E-01 \\
+        \midrule
+		\multirow{5}{*}{$u_y$ (m s$^{-1}$)} & Moltres & 0.000E+00 & 5.173E-05 & 6.169E-04 & 3.842E-03 & 1.250E-02 & 2.525E-02 & 3.050E-02 & 1.500E-02 & 0.000E+00 \\
+		& CNRS & 0.000E+00 & 5.641E-05 & 6.309E-04 & 3.862E-03 & 1.251E-02 & 2.524E-02 & 3.048E-02 & 1.500E-02 & 0.000E+00 \\
+        & PoliMi & 0.000E+00 & 9.118E-05 & 7.484E-04 & 4.046E-03 & 1.269E-02 & 2.534E-02 & 3.050E-02 & 1.500E-02 & 0.000E+00 \\
+        & PSI & 0.000E+00 & 7.727E-05 & 6.822E-04 & 3.875E-03 & 1.230E-02 & 2.472E-02 & 2.994E-02 & 1.481E-02 & 0.000E+00 \\
+        & TUD & 1.501E-06 & 5.260E-05 & 6.209E-04 & 3.853E-03 & 1.252E-02 & 2.528E-02 & 3.053E-02 & 1.502E-02 & 7.987E-06 \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
+\pagebreak
+
 \section*{Step 0.2: Neutronics}
 
-\begin{table}[htb!]
-	\caption{Velocity components along $AA'$ and $BB'$ centerline.}
+\begin{table}[htbp!]
+	\caption{Fission rate density along $AA'$.}
 	\centering
 	\footnotesize
 	\setlength\tabcolsep{1.5pt}
-	\begin{tabular}{l c c c c c c c c c}
+	\begin{tabular}{c c c c c c c c c c c}
 		\toprule
-		\multirow{2}{*}{\textbf{Observable}} & \multicolumn{9}{c}{\textbf{Results along $AA'$} (points coordinate are expressed in m)} \\
-		& {(0,1)} & {(0.25,1)} & {(0.5,1)} & {(0.75,1)} & {(1,1)} & {(1.25,1)} & {(1.5,1)} & {(1.75,1)} & {(2,1)} \\
+		\multirow{2}{*}{\textbf{Observable}} & \multirow{2}{*}{\textbf{Code}} & \multicolumn{9}{c}{\textbf{Results along $AA'$} (point coordinates are expressed in m)} \\
+		& & {(0,1)} & {(0.25,1)} & {(0.5,1)} & {(0.75,1)} & {(1,1)} & {(1.25,1)} & {(1.5,1)} & {(1.75,1)} & {(2,1)} \\
 		\midrule
-		$\int_E \Sigma_f \Phi$d$E$ (m$^{-3}$s$^{-1}$) & 7.701E+17 & 7.461E+18
+		\multirow{7}{*}{\shortstack[1]{$\int_E \Sigma_f \Phi$d$E$\\(m$^{-3}$s$^{-1}$)}} & Moltres & 7.701E+17 & 7.461E+18
 		& 1.303E+19 & 1.672E+19 & 1.801E+19 & 1.672E+19 & 1.303E+19 &
 		7.461E+18 & 7.701E+17 \\
+		& CNRS-$SP_1$ & 6.896E+17 & 7.436E+18 & 1.305E+19 & 1.678E+19 & 1.809E+19 & 1.678E+19 & 1.305E+19 & 7.436E+18 & 6.896E+17 \\
+		& CNRS-$SP_3$ & 6.206E+17 & 7.450E+18 & 1.303E+19 & 1.673E+19 & 1.802E+19 & 1.673E+19 & 1.303E+19 & 7.450E+18 & 6.206E+17 \\
+		& Polimi & 7.780E+17 & 7.470E+18 & 1.310E+19 & 1.684E+19 & 1.815E+19 & 1.684E+19 & 1.310E+19 & 7.470E+18 & 7.780E+17 \\
+		& PSI & 8.622E+17 & 7.436E+18 & 1.305E+19 & 1.678E+19 & 1.809E+19 & 1.678E+19 & 1.305E+19 & 7.436E+18 & 8.622E+17 \\
+		& TUD-$S_2$ & 6.626E+17 & 7.433E+18 & 1.307E+19 & 1.682E+19 & 1.814E+19 & 1.682E+19 & 1.307E+19 & 7.433E+18 & 6.626E+17 \\
+		& TUD-$S_6$ & 6.833E+17 & 7.463E+18 & 1.300E+19 & 1.667E+19 & 1.796E+19 & 1.667E+19 & 1.300E+19 & 7.463E+18 & 6.833E+17 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\section*{Step 0.3: Temperature}
+
+\begin{table}[htbp!]
+	\caption{Temperature distribution along centerlines $AA'$ and $BB'$.}
+	\centering
+	\footnotesize
+	\setlength\tabcolsep{1.5pt}
+	\begin{tabular}{c c c c c c c c c c c}
+		\toprule
+		\multirow{2}{*}{\textbf{Observable}} & \multirow{2}{*}{\textbf{Code}} & \multicolumn{9}{c}{\textbf{Results along $AA'$} (point coordinates are expressed in m)} \\
+		& & {(0,1)} & {(0.25,1)} & {(0.5,1)} & {(0.75,1)} & {(1,1)} & {(1.25,1)} & {(1.5,1)} & {(1.75,1)} & {(2,1)} \\
+		\midrule
+		\multirow{7}{*}{$T$ (K)} & Moltres & 9.251E+02 & 1.193E+03 & 1.354E+03 & 1.360E+03 &
+		1.306E+03 & 1.229E+03 & 1.137E+03 & 1.038E+03 & 9.251E+02 \\
+		& CNRS-$SP_1$ & 9.253E+02 & 1.194E+03 & 1.358E+03 & 1.363E+03 & 1.305E+03 & 1.224E+03 & 1.131E+03 & 1.034E+03 & 9.251E+02 \\
+		& CNRS-$SP_3$ & 9.236E+02 & 1.194E+03 & 1.357E+03 & 1.361E+03 & 1.304E+03 & 1.224E+03 & 1.131E+03 & 1.034E+03 & 9.235E+02 \\
+		& Polimi & 9.253E+02 & 1.196E+03 & 1.361E+03 & 1.364E+03 & 1.305E+03 & 1.224E+03 & 1.132E+03 & 1.035E+03 & 9.252E+02 \\
+		& PSI & 9.253E+02 & 1.196E+03 & 1.356E+03 & 1.363E+03 & 1.306E+03 & 1.226E+03 & 1.133E+03 & 1.037E+03 & 9.252E+02 \\
+		& TUD-$S_2$ & 9.212E+02 & 1.194E+03 & 1.359E+03 & 1.364E+03 & 1.305E+03 & 1.224E+03 & 1.131E+03 & 1.032E+03 & 9.225E+02 \\
+		& TUD-$S_6$ & 9.219E+02 & 1.194E+03 & 1.356E+03 & 1.360E+03 & 1.303E+03 & 1.223E+03 & 1.131E+03 & 1.034E+03 & 9.233E+02 \\
+		\midrule
+		\midrule
+		\multirow{2}{*}{\textbf{Observable}} & \multirow{2}{*}{\textbf{Code}} & \multicolumn{9}{c}{\textbf{Results along $BB'$} (point coordinates are expressed in m)} \\
+		& & {(1,0)} & {(1,0.25)} & {(1,0.5)} & {(1,0.75)} & {(1,1)} & {(1,1.25)} & {(1,1.5)} & {(1,1.75)} & {(1,2)} \\
+		\midrule
+		\multirow{7}{*}{$T$ (K)} & Moltres & 9.251E+02 & 1.140E+03 & 1.271E+03 & 1.304E+03 &
+		1.306E+03 & 1.315E+03 & 1.319E+03 & 1.262E+03 & 9.272E+02 \\
+		& CNRS-$SP_1$ & 9.252E+02 & 1.139E+03 & 1.273E+03 & 1.305E+03 & 1.305E+03 & 1.314E+03 & 1.321E+03 & 1.265E+03 & 9.322E+02 \\
+		& CNRS-$SP_3$ & 9.236E+02 & 1.140E+03 & 1.272E+03 & 1.304E+03 & 1.304E+03 & 1.313E+03 & 1.320E+03 & 1.265E+03 & 9.322E+02 \\
+		& Polimi & 9.253E+02 & 1.140E+03 & 1.275E+03 & 1.307E+03 & 1.305E+03 & 1.313E+03 & 1.321E+03 & 1.265E+03 & 9.303E+02 \\
+		& PSI & 9.252E+02 & 1.139E+03 & 1.273E+03 & 1.307E+03 & 1.306E+03 & 1.312E+03 & 1.319E+03 & 1.263E+03 & 9.481E+02 \\
+		& TUD-$S_2$ & 9.215E+02 & 1.139E+03 & 1.273E+03 & 1.305E+03 & 1.305E+03 & 1.315E+03 & 1.322E+03 & 1.265E+03 & 9.374E+02 \\
+		& TUD-$S_6$ & 9.222E+02 & 1.140E+03 & 1.272E+03 & 1.303E+03 & 1.303E+03 & 1.312E+03 & 1.319E+03 & 1.264E+03 & 9.390E+02 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\pagebreak
+
+\section*{Step 1.1: Circulating Fuel}
+
+\begin{table}[htbp!]
+	\caption{Temperature distribution along centerlines $AA'$ and $BB'$.}
+	\centering
+	\footnotesize
+	\setlength\tabcolsep{1.5pt}
+	\begin{tabular}{c c c c c c c c c c c}
+		\toprule
+		\multirow{2}{*}{\textbf{Observable}} & \multirow{2}{*}{\textbf{Code}} & \multicolumn{9}{c}{\textbf{Results along $AA'$} (point coordinates are expressed in m)} \\
+		& & {(0,1)} & {(0.25,1)} & {(0.5,1)} & {(0.75,1)} & {(1,1)} & {(1.25,1)} & {(1.5,1)} & {(1.75,1)} & {(2,1)} \\
+		\midrule
+		\multirow{7}{*}{$T$ (K)} & Moltres & 9.251E+02 & 1.193E+03 & 1.354E+03 & 1.360E+03 &
+		1.306E+03 & 1.229E+03 & 1.137E+03 & 1.038E+03 & 9.251E+02 \\
+		& CNRS-$SP_1$ & 9.253E+02 & 1.194E+03 & 1.358E+03 & 1.363E+03 & 1.305E+03 & 1.224E+03 & 1.131E+03 & 1.034E+03 & 9.251E+02 \\
+		& CNRS-$SP_3$ & 9.236E+02 & 1.194E+03 & 1.357E+03 & 1.361E+03 & 1.304E+03 & 1.224E+03 & 1.131E+03 & 1.034E+03 & 9.235E+02 \\
+		& Polimi & 9.253E+02 & 1.196E+03 & 1.361E+03 & 1.364E+03 & 1.305E+03 & 1.224E+03 & 1.132E+03 & 1.035E+03 & 9.252E+02 \\
+		& PSI & 9.253E+02 & 1.196E+03 & 1.356E+03 & 1.363E+03 & 1.306E+03 & 1.226E+03 & 1.133E+03 & 1.037E+03 & 9.252E+02 \\
+		& TUD-$S_2$ & 9.212E+02 & 1.194E+03 & 1.359E+03 & 1.364E+03 & 1.305E+03 & 1.224E+03 & 1.131E+03 & 1.032E+03 & 9.225E+02 \\
+		& TUD-$S_6$ & 9.219E+02 & 1.194E+03 & 1.356E+03 & 1.360E+03 & 1.303E+03 & 1.223E+03 & 1.131E+03 & 1.034E+03 & 9.233E+02 \\
+		\midrule
+		\midrule
+		\multirow{2}{*}{\textbf{Observable}} & \multirow{2}{*}{\textbf{Code}} & \multicolumn{9}{c}{\textbf{Results along $BB'$} (point coordinates are expressed in m)} \\
+		& & {(1,0)} & {(1,0.25)} & {(1,0.5)} & {(1,0.75)} & {(1,1)} & {(1,1.25)} & {(1,1.5)} & {(1,1.75)} & {(1,2)} \\
+		\midrule
+		\multirow{7}{*}{$T$ (K)} & Moltres & 9.251E+02 & 1.140E+03 & 1.271E+03 & 1.304E+03 &
+		1.306E+03 & 1.315E+03 & 1.319E+03 & 1.262E+03 & 9.272E+02 \\
+		& CNRS-$SP_1$ & 9.252E+02 & 1.139E+03 & 1.273E+03 & 1.305E+03 & 1.305E+03 & 1.314E+03 & 1.321E+03 & 1.265E+03 & 9.322E+02 \\
+		& CNRS-$SP_3$ & 9.236E+02 & 1.140E+03 & 1.272E+03 & 1.304E+03 & 1.304E+03 & 1.313E+03 & 1.320E+03 & 1.265E+03 & 9.322E+02 \\
+		& Polimi & 9.253E+02 & 1.140E+03 & 1.275E+03 & 1.307E+03 & 1.305E+03 & 1.313E+03 & 1.321E+03 & 1.265E+03 & 9.303E+02 \\
+		& PSI & 9.252E+02 & 1.139E+03 & 1.273E+03 & 1.307E+03 & 1.306E+03 & 1.312E+03 & 1.319E+03 & 1.263E+03 & 9.481E+02 \\
+		& TUD-$S_2$ & 9.215E+02 & 1.139E+03 & 1.273E+03 & 1.305E+03 & 1.305E+03 & 1.315E+03 & 1.322E+03 & 1.265E+03 & 9.374E+02 \\
+		& TUD-$S_6$ & 9.222E+02 & 1.140E+03 & 1.272E+03 & 1.303E+03 & 1.303E+03 & 1.312E+03 & 1.319E+03 & 1.264E+03 & 9.390E+02 \\
 		\bottomrule
 	\end{tabular}
 \end{table}

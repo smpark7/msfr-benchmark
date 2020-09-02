@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-aa = pd.read_csv('vel-field-stabilized_csv_aa_0064.csv')
-bb = pd.read_csv('vel-field-stabilized_csv_bb_0064.csv')
+aa = pd.read_csv('vel-field-stabilized_csv_aa_0062.csv')
+bb = pd.read_csv('vel-field-stabilized_csv_bb_0062.csv')
 
 fig, ax = plt.subplots()
 ax.plot(bb['ux'] / 100, bb['y'] / 100)
