@@ -238,7 +238,6 @@ tau = .2        # SUPG stabilization factor
     num_points = 201
     sort_by = x
     execute_on = FINAL
-    outputs = 'csv'
   [../]
   [./bb]
     type = LineValueSampler
@@ -248,16 +247,15 @@ tau = .2        # SUPG stabilization factor
     num_points = 201
     sort_by = y
     execute_on = FINAL
-    outputs = 'csv'
   [../]
 []
 
 [Outputs]
   perf_graph = true
   print_linear_residuals = true
-  exodus = true
-  [./csv]
-    type = CSV
+  csv = true
+  [./out]
+    type = Exodus
     execute_on = 'final'
   [../]
 []
