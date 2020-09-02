@@ -14,7 +14,7 @@ for i in range(6):
 fig, ax = plt.subplots()
 ax.plot(data['x'] / 100, fiss)
 ax.set_xlim(0, 2)
-ax.set_ylim(0, 2e19)
+ax.set_ylim(0, 2e17)
 
 x = np.arange(0, 201, 25)
 discrete = np.zeros(len(x))
