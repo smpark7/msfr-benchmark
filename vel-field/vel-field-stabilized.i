@@ -7,7 +7,7 @@ Sc = 2.0e8              # Schmidt number
 [GlobalParams]
   pspg = true
   supg = true
-  alpha = .15
+  alpha = .2
   integrate_p_by_parts = true
   gravity = '0 0 0'  
 []

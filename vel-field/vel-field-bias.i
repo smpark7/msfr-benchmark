@@ -13,7 +13,7 @@ Sc = 2.0e8              # Schmidt number
 []
 
 [Mesh]
-  file = 'nts-bias_out.e'
+  file = '../temperature/bias-200-quad9.e'
 []
 
 [MeshModifiers]
