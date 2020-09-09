@@ -222,31 +222,24 @@ tau = .2        # SUPG stabilization factor
 []
 
 [Executioner]
-  type = Transient
-  end_time = 2000
+  type = InversePowerMethod
+  max_power_iterations = 50
 
+  # fission power normalization
+  normalization = 'powernorm'
+  normal_factor = 1e7           # Watts, 1e9 / 100
+
+  xdiff = 'group1diff'
+  bx_norm = 'bnorm'
+  k0 = 1.00400
+  pfactor = 1e-2
+  l_max_its = 100
+
+  # solve_type = 'PJFNK'
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
-  petsc_options_iname = '-pc_type -pc_factor_shift_type'
-  petsc_options_value = 'lu       NONZERO'
-  line_search = 'none'
-
-  nl_max_its = 15
-  l_max_its = 30
-
-  nl_abs_tol = 1e-10
-
-  dtmin = 1e-5
-  dtmax = 1
-  steady_state_detection = true
-  [./TimeStepper]
-    type = IterationAdaptiveDT
-    dt = 1e-5
-    cutback_factor = .5
-    growth_factor = 1.2
-    optimal_iterations = 10
-    iteration_window = 4
-  [../]
+  petsc_options_iname = '-pc_type -pc_factor_shift_type -pc_factor_mat_solver_package'
+  petsc_options_value = 'lu       NONZERO               superlu_dist'
 []
 
 [Preconditioning]
