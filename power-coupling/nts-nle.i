@@ -36,8 +36,7 @@ tau = .2        # SUPG stabilization factor
   vacuum_boundaries = 'bottom left right top'
   create_temperature_var = false
   eigen = true
-#  initial_condition = 1
-  init_nts_from_file = true
+  initial_condition = 1
 []
 
 [Precursors]
@@ -61,6 +60,7 @@ tau = .2        # SUPG stabilization factor
   [./temp]
     family = LAGRANGE
     order = FIRST
+    initial_condition = 900
   [../]
   [./ux]
     family = LAGRANGE
@@ -170,8 +170,9 @@ tau = .2        # SUPG stabilization factor
 []
 
 [Executioner]
-  type = InversePowerMethod
+  type = NonlinearEigen
   max_power_iterations = 50
+  auto_advance = true
 
   # fission power normalization
   normalization = 'powernorm'
@@ -183,9 +184,7 @@ tau = .2        # SUPG stabilization factor
   pfactor = 1e-2
   l_max_its = 100
   free_power_iterations = 4
-  eig_check_tol = 1e-4
-
-  picard_max_its = 10
+  eig_check_tol = 1e-5
 
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
@@ -282,68 +281,6 @@ tau = .2        # SUPG stabilization factor
     num_points = 201
     sort_by = y
     execute_on = FINAL
-  [../]
-[]
-
-[MultiApps]
-  [./tempApp]
-    type = FullSolveMultiApp
-#    execute_on = initial
-    positions = '400 400 0'
-    input_files = 'sub.i'
-    no_backup_and_restore = true
-  [../]
-[]
-
-[Transfers]
-  [./group1_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group1'
-    to_aux_scalar = 'group1'
-    direction = to_multiapp
-  [../]
-  [./group2_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group2'
-    to_aux_scalar = 'group2'
-    direction = to_multiapp
-  [../]
-  [./group3_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group3'
-    to_aux_scalar = 'group3'
-    direction = to_multiapp
-  [../]
-  [./group4_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group4'
-    to_aux_scalar = 'group4'
-    direction = to_multiapp
-  [../]
-  [./group5_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group5'
-    to_aux_scalar = 'group5'
-    direction = to_multiapp
-  [../]
-  [./group6_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group6'
-    to_aux_scalar = 'group6'
-    direction = to_multiapp
-  [../]
-  [./temp_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = temp
-    to_aux_scalar = temp
-    direction = from_multiapp
   [../]
 []
 

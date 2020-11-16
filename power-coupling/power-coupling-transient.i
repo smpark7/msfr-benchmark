@@ -17,14 +17,14 @@ tau = .2        # SUPG stabilization factor
 
 [Mesh]
   file = '../temperature/temp-steady-supg_out.e'
-#  type = GeneratedMesh
-#  dim = 2
-#  nx = 200
-#  ny = 200
-#  xmin = 0
-#  xmax = 200
-#  ymin = 0
-#  ymax = 200
+#    type = GeneratedMesh
+#    dim = 2
+#    nx = 200
+#    ny = 200
+#    xmin = 0
+#    xmax = 200
+#    ymin = 0
+#    ymax = 200
 []
 
 [Problem]
@@ -35,8 +35,7 @@ tau = .2        # SUPG stabilization factor
   var_name_base = group
   vacuum_boundaries = 'bottom left right top'
   create_temperature_var = false
-  eigen = true
-#  initial_condition = 1
+  eigen = false
   init_nts_from_file = true
 []
 
@@ -50,24 +49,30 @@ tau = .2        # SUPG stabilization factor
     nt_exp_form = false
     family = MONOMIAL
     order = CONSTANT
-    transient = false
+    transient = true
   [../]
 []
 
 [Variables]
-[]
-
-[AuxVariables]
   [./temp]
     family = LAGRANGE
     order = FIRST
+    initial_from_file_var = temp
+    initial_from_file_timestep = LATEST
   [../]
+[]
+
+[AuxVariables]
   [./ux]
     family = LAGRANGE
     order = FIRST
   [../]
   [./uy]
     family = LAGRANGE
+    order = FIRST
+  [../]
+  [./vel]
+    family = LAGRANGE_VEC
     order = FIRST
   [../]
 []
@@ -97,7 +102,55 @@ tau = .2        # SUPG stabilization factor
   [../]
 []
 
+[Functions]
+  [./uxf]
+    type = SolutionFunction
+    from_variable = ux
+    solution = velocities
+  [../]
+  [./uyf]
+    type = SolutionFunction
+    from_variable = uy
+    solution = velocities
+  [../]
+[]
+
+[ICs]
+  [./vel_ic]
+    type = VectorFunctionIC
+    variable = vel
+    function_x = uxf
+    function_y = uyf
+  [../]
+[]
+
 [Kernels]
+  [./temp_source]
+    type = TransientFissionHeatSource
+    nt_scale = 1
+    variable = temp
+  [../]
+  [./temp_time]
+    type = INSTemperatureTimeDerivative
+    variable = temp
+  [../]
+  [./temp_all]
+    type = INSTemperature
+    variable = temp
+    u = ux
+    v = uy
+  [../]
+  [./temp_supg]
+    type = INSADTemperatureAdvectionSUPG
+    variable = temp
+    velocity = vel
+  [../]
+  [./temp_sink]
+    type = ManuHX
+    variable = temp
+    htc = ${gamma}
+    tref = 900
+  [../]
 []
 
 [DGKernels]
@@ -170,28 +223,31 @@ tau = .2        # SUPG stabilization factor
 []
 
 [Executioner]
-  type = InversePowerMethod
-  max_power_iterations = 50
-
-  # fission power normalization
-  normalization = 'powernorm'
-  normal_factor = 1e7           # Watts, 1e9 / 100
-
-  xdiff = 'group1diff'
-  bx_norm = 'bnorm'
-  k0 = 0.9900
-  pfactor = 1e-2
-  l_max_its = 100
-  free_power_iterations = 4
-  eig_check_tol = 1e-4
-
-  picard_max_its = 10
+  type = Transient
+  end_time = 2000
 
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
   petsc_options_iname = '-pc_type -pc_factor_shift_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       NONZERO               superlu_dist'
   line_search = 'none'
+
+  nl_max_its = 15
+  l_max_its = 30
+
+  nl_abs_tol = 1e-10
+
+  dtmin = 1e-5
+  dtmax = 1
+  steady_state_detection = true
+  [./TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 1e-5
+    cutback_factor = .5
+    growth_factor = 1.2
+    optimal_iterations = 10
+    iteration_window = 4
+  [../]
 []
 
 [Preconditioning]
@@ -226,12 +282,6 @@ tau = .2        # SUPG stabilization factor
     execute_on = timestep_end
     outputs = 'console'
   [../]
-  [./group1diff]
-    type = ElementL2Diff
-    variable = group1
-    execute_on = 'linear timestep_end'
-    use_displaced_mesh = false
-  [../]
   [./group2norm]
     type = ElementIntegralVariablePostprocessor
     variable = group2
@@ -246,106 +296,44 @@ tau = .2        # SUPG stabilization factor
   [../]
 []
 
-[VectorPostprocessors]
-  [./temp_aa]
-    type = LineValueSampler
-    variable = 'temp'
-    start_point = '0 100 0'
-    end_point = '200 100 0'
-    num_points = 201
-    sort_by = x
-    execute_on = FINAL
-  [../]
-  [./temp_bb]
-    type = LineValueSampler
-    variable = 'temp'
-    start_point = '100 0 0'
-    end_point = '100 200 0'
-    num_points = 201
-    sort_by = y
-    execute_on = FINAL
-  [../]
-  [./fiss_aa]
-    type = LineValueSampler
-    variable = 'group1 group2 group3 group4 group5 group6'
-    start_point = '0 100 0'
-    end_point = '200 100 0'
-    num_points = 201
-    sort_by = x
-    execute_on = FINAL
-  [../]
-  [./fiss_bb]
-    type = LineValueSampler
-    variable = 'group1 group2 group3 group4 group5 group6'
-    start_point = '100 0 0'
-    end_point = '100 200 0'
-    num_points = 201
-    sort_by = y
-    execute_on = FINAL
-  [../]
-[]
-
-[MultiApps]
-  [./tempApp]
-    type = FullSolveMultiApp
-#    execute_on = initial
-    positions = '400 400 0'
-    input_files = 'sub.i'
-    no_backup_and_restore = true
-  [../]
-[]
-
-[Transfers]
-  [./group1_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group1'
-    to_aux_scalar = 'group1'
-    direction = to_multiapp
-  [../]
-  [./group2_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group2'
-    to_aux_scalar = 'group2'
-    direction = to_multiapp
-  [../]
-  [./group3_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group3'
-    to_aux_scalar = 'group3'
-    direction = to_multiapp
-  [../]
-  [./group4_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group4'
-    to_aux_scalar = 'group4'
-    direction = to_multiapp
-  [../]
-  [./group5_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group5'
-    to_aux_scalar = 'group5'
-    direction = to_multiapp
-  [../]
-  [./group6_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group6'
-    to_aux_scalar = 'group6'
-    direction = to_multiapp
-  [../]
-  [./temp_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = temp
-    to_aux_scalar = temp
-    direction = from_multiapp
-  [../]
-[]
+#[VectorPostprocessors]
+#  [./temp_aa]
+#    type = LineValueSampler
+#    variable = 'temp'
+#    start_point = '0 100 0'
+#    end_point = '200 100 0'
+#    num_points = 201
+#    sort_by = x
+#    execute_on = FINAL
+#  [../]
+#  [./temp_bb]
+#    type = LineValueSampler
+#    variable = 'temp'
+#    start_point = '100 0 0'
+#    end_point = '100 200 0'
+#    num_points = 201
+#    sort_by = y
+#    execute_on = FINAL
+#  [../]
+#  [./fiss_aa]
+#    type = LineValueSampler
+#    variable = 'group1 group2 group3 group4 group5 group6'
+#    start_point = '0 100 0'
+#    end_point = '200 100 0'
+#    num_points = 201
+#    sort_by = x
+#    execute_on = FINAL
+#  [../]
+#  [./fiss_bb]
+#    type = LineValueSampler
+#    variable = 'group1 group2 group3 group4 group5 group6'
+#    start_point = '100 0 0'
+#    end_point = '100 200 0'
+#    num_points = 201
+#    sort_by = y
+#    execute_on = FINAL
+#  [../]
+#[]
 
 [Outputs]
   perf_graph = true

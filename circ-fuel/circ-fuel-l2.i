@@ -1,5 +1,5 @@
 density = .002  # kg cm-3
-cp = 3075      # J cm-3 K-1
+c_p = 3075      # J cm-3 K-1
 k = .005        # W cm-1 K-1
 gamma = 1       # W cm-3 K-1, Volumetric heat transfer coefficient
 tau = .2        # SUPG stabilization factor
@@ -10,21 +10,20 @@ tau = .2        # SUPG stabilization factor
   use_exp_form = false
   group_fluxes = 'group1 group2 group3 group4 group5 group6'
   pre_concs = 'pre1 pre2 pre3 pre4 pre5 pre6 pre7 pre8'
+  temperature = 900
   sss2_input = true
   account_delayed = true
-  temperature = temp
 [../]
 
 [Mesh]
-  file = '../temperature/temp-steady-supg_out.e'
-#  type = GeneratedMesh
-#  dim = 2
-#  nx = 200
-#  ny = 200
-#  xmin = 0
-#  xmax = 200
-#  ymin = 0
-#  ymax = 200
+    type = GeneratedMesh
+    dim = 2
+    nx = 200
+    ny = 200
+    xmin = 0
+    xmax = 200
+    ymin = 0
+    ymax = 200
 []
 
 [Problem]
@@ -36,8 +35,6 @@ tau = .2        # SUPG stabilization factor
   vacuum_boundaries = 'bottom left right top'
   create_temperature_var = false
   eigen = true
-#  initial_condition = 1
-  init_nts_from_file = true
 []
 
 [Precursors]
@@ -48,20 +45,13 @@ tau = .2        # SUPG stabilization factor
     uvel = ux
     vvel = uy
     nt_exp_form = false
-    family = MONOMIAL
-    order = CONSTANT
+    family = L2_LAGRANGE
+    order = FIRST
     transient = false
   [../]
 []
 
-[Variables]
-[]
-
 [AuxVariables]
-  [./temp]
-    family = LAGRANGE
-    order = FIRST
-  [../]
   [./ux]
     family = LAGRANGE
     order = FIRST
@@ -82,6 +72,57 @@ tau = .2        # SUPG stabilization factor
   [../]
 []
 
+[Kernels]
+  [./pre1_advection]
+    type = CoupledScalarAdvection
+    variable = pre1
+    u = ux
+    v = uy
+  [../]
+  [./pre2_advection]
+    type = CoupledScalarAdvection
+    variable = pre2
+    u = ux
+    v = uy
+  [../]
+  [./pre3_advection]
+    type = CoupledScalarAdvection
+    variable = pre3
+    u = ux
+    v = uy
+  [../]
+  [./pre4_advection]
+    type = CoupledScalarAdvection
+    variable = pre4
+    u = ux
+    v = uy
+  [../]
+  [./pre5_advection]
+    type = CoupledScalarAdvection
+    variable = pre5
+    u = ux
+    v = uy
+  [../]
+  [./pre6_advection]
+    type = CoupledScalarAdvection
+    variable = pre6
+    u = ux
+    v = uy
+  [../]
+  [./pre7_advection]
+    type = CoupledScalarAdvection
+    variable = pre7
+    u = ux
+    v = uy
+  [../]
+  [./pre8_advection]
+    type = CoupledScalarAdvection
+    variable = pre8
+    u = ux
+    v = uy
+  [../]
+[]
+
 [AuxKernels]
   [./ux]
     type = SolutionAux
@@ -95,9 +136,6 @@ tau = .2        # SUPG stabilization factor
     from_variable = uy
     solution = velocities
   [../]
-[]
-
-[Kernels]
 []
 
 [DGKernels]
@@ -164,8 +202,6 @@ tau = .2        # SUPG stabilization factor
     type = GenericMoltresMaterial
     property_tables_root = '../neutron-data/benchmark_'
     interp_type = 'linear'
-    prop_names = 'k rho cp tau'
-    prop_values = '${k} ${density} ${cp} ${tau}'
   [../]
 []
 
@@ -179,19 +215,15 @@ tau = .2        # SUPG stabilization factor
 
   xdiff = 'group1diff'
   bx_norm = 'bnorm'
-  k0 = 0.9900
+  k0 = 1.00400
   pfactor = 1e-2
   l_max_its = 100
-  free_power_iterations = 4
-  eig_check_tol = 1e-4
 
-  picard_max_its = 10
-
+  # solve_type = 'PJFNK'
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
   petsc_options_iname = '-pc_type -pc_factor_shift_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       NONZERO               superlu_dist'
-  line_search = 'none'
 []
 
 [Preconditioning]
@@ -218,13 +250,11 @@ tau = .2        # SUPG stabilization factor
     type = ElementIntegralVariablePostprocessor
     variable = group1
     execute_on = linear
-    outputs = 'console'
   [../]
   [./group1max]
     type = NodalMaxValue
     variable = group1
     execute_on = timestep_end
-    outputs = 'console'
   [../]
   [./group1diff]
     type = ElementL2Diff
@@ -236,124 +266,49 @@ tau = .2        # SUPG stabilization factor
     type = ElementIntegralVariablePostprocessor
     variable = group2
     execute_on = linear
-    outputs = 'console'
   [../]
   [./group2max]
     type = NodalMaxValue
     variable = group2
     execute_on = timestep_end
-    outputs = 'console'
+  [../]
+  [./group2diff]
+    type = ElementL2Diff
+    variable = group2
+    execute_on = 'linear timestep_end'
+    use_displaced_mesh = false
   [../]
 []
 
 [VectorPostprocessors]
-  [./temp_aa]
+  [./aa]
     type = LineValueSampler
-    variable = 'temp'
+    variable = 'pre1 pre2 pre3 pre4 pre5 pre6 pre7 pre8'
     start_point = '0 100 0'
     end_point = '200 100 0'
     num_points = 201
     sort_by = x
     execute_on = FINAL
   [../]
-  [./temp_bb]
+  [./bb]
     type = LineValueSampler
-    variable = 'temp'
+    variable = 'pre1 pre2 pre3 pre4 pre5 pre6 pre7 pre8'
     start_point = '100 0 0'
     end_point = '100 200 0'
     num_points = 201
     sort_by = y
     execute_on = FINAL
-  [../]
-  [./fiss_aa]
-    type = LineValueSampler
-    variable = 'group1 group2 group3 group4 group5 group6'
-    start_point = '0 100 0'
-    end_point = '200 100 0'
-    num_points = 201
-    sort_by = x
-    execute_on = FINAL
-  [../]
-  [./fiss_bb]
-    type = LineValueSampler
-    variable = 'group1 group2 group3 group4 group5 group6'
-    start_point = '100 0 0'
-    end_point = '100 200 0'
-    num_points = 201
-    sort_by = y
-    execute_on = FINAL
-  [../]
-[]
-
-[MultiApps]
-  [./tempApp]
-    type = FullSolveMultiApp
-#    execute_on = initial
-    positions = '400 400 0'
-    input_files = 'sub.i'
-    no_backup_and_restore = true
-  [../]
-[]
-
-[Transfers]
-  [./group1_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group1'
-    to_aux_scalar = 'group1'
-    direction = to_multiapp
-  [../]
-  [./group2_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group2'
-    to_aux_scalar = 'group2'
-    direction = to_multiapp
-  [../]
-  [./group3_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group3'
-    to_aux_scalar = 'group3'
-    direction = to_multiapp
-  [../]
-  [./group4_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group4'
-    to_aux_scalar = 'group4'
-    direction = to_multiapp
-  [../]
-  [./group5_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group5'
-    to_aux_scalar = 'group5'
-    direction = to_multiapp
-  [../]
-  [./group6_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = 'group6'
-    to_aux_scalar = 'group6'
-    direction = to_multiapp
-  [../]
-  [./temp_transfer]
-    type = MultiAppScalarToAuxScalarTransfer
-    multi_app = tempApp
-    source_variable = temp
-    to_aux_scalar = temp
-    direction = from_multiapp
   [../]
 []
 
 [Outputs]
   perf_graph = true
   print_linear_residuals = true
+  csv = true
   [./out]
     type = Exodus
+    discontinuous = true
   [../]
-  csv = true
 []
 
 [Debug]
