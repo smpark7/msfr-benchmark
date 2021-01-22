@@ -68,7 +68,6 @@
   k0 = 1.00400
   pfactor = 1e-2
   l_max_its = 100
-  eig_check_tol = 1e-7
 
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
