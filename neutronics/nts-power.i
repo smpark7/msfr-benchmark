@@ -1,6 +1,3 @@
-density = 2.0e-3        # kg cm-3
-c_p = 6.15              # J cm-3 K-1
-
 [GlobalParams]
   num_groups = 6
   num_precursor_groups = 8
@@ -21,7 +18,7 @@ c_p = 6.15              # J cm-3 K-1
     xmax = 200
     ymin = 0
     ymax = 200
-    elem_type = QUAD9
+    elem_type = QUAD4
 []
 
 [Problem]
@@ -72,11 +69,12 @@ c_p = 6.15              # J cm-3 K-1
   pfactor = 1e-2
   l_max_its = 100
 
-  # solve_type = 'PJFNK'
   solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
   petsc_options_iname = '-pc_type -pc_factor_shift_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       NONZERO               superlu_dist'
+  petsc_options_iname = '-pc_type -sub_pc_type'
+  petsc_options_value = 'asm      lu'
 []
 
 [Preconditioning]
@@ -148,10 +146,12 @@ c_p = 6.15              # J cm-3 K-1
 [Outputs]
   perf_graph = true
   print_linear_residuals = true
-  [./out]
+  [./exodus]
     type = Exodus
   [../]
-  csv = true
+  [./csv]
+    type = CSV
+  [../]
 []
 
 [Debug]

@@ -30,12 +30,6 @@ Sc = 2.0e8              # Schmidt number
     new_boundary = 'pinned_node'
     coord = '200.0 200.0'
   [../]
-  [./top_left]
-    type = ExtraNodesetGenerator
-    input = corner_node
-    new_boundary = 'top_left'
-    coord = '0.0 200.0'
-  [../]
 []
 
 [Problem]
@@ -111,12 +105,6 @@ Sc = 2.0e8              # Schmidt number
     variable = ux
     function = 'velFunc'
     boundary = 'top'
-  [../]
-  [./ux_top_left]
-    type = DirichletBC
-    variable = ux
-    value = 50.0
-    boundary = 'top_left'
   [../]
   [./p_pin]
     type = DirichletBC
