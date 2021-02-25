@@ -30,6 +30,7 @@
   vacuum_boundaries = 'bottom left right top'
   create_temperature_var = false
   eigen = true
+  scaling = 1e3
 []
 
 [Precursors]
@@ -44,6 +45,8 @@
     family = MONOMIAL
     order = CONSTANT
     transient = false
+    scaling = 1e3
+    eigen = true
   [../]
 []
 
@@ -70,7 +73,7 @@
   l_max_its = 100
   eig_check_tol = 1e-7
 
-  solve_type = 'PJFNK'
+  solve_type = 'NEWTON'
   petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
   petsc_options_iname = '-pc_type -pc_factor_shift_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       NONZERO               superlu_dist'
@@ -79,7 +82,7 @@
 [Preconditioning]
   [./SMP]
     type = SMP
-    full = false
+    full = true
   [../]
 []
 
